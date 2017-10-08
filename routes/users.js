@@ -1,28 +1,20 @@
 var express = require('express');
 var router = express.Router();
+var User = require('../db/db').User
 
 /* GET users listing. */
 router.get('/', function(req, res) {
-  res.send(
-      {
-          author: {
-              firstName: 'Jean',
-              lastName: 'Dupond',
-              email: 'jean.dupond@gmail.com',
-              address: {
-                  rue: '9 rue de la Paix',
-                  city: 'Paris',
-                  postal_code: '75002'
-              },
-              phone_number: '0683165620',
-              coordinate: {
-                  long: 2.331241099999943,
-                  lat: 48.8687607
-              }
-          },
-          created: 1457910000
-      }
-  );
+    var fakeUser = {
+        firstName: 'jean',
+        lastName: 'dupond',
+        email: 'jean@gmail.com',
+        password: 'qsdfqsdfqsdfqsdf',
+        salt: 'sdfsdf'
+    };
+    const user = new User(fakeUser);
+    user.save()
+        .then(user => res.send(user))
+        .catch(error => res.sendStatus(400));
 });
 
 module.exports = router;
