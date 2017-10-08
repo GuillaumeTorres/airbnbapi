@@ -4,9 +4,9 @@ AirBnB Like api
 #### Install
 
 ```
+$ touch .env
 $ npm install
 $ apt install mongodb
-$ touch .env
 ```
 #### Run
 

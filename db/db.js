@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-mongoose.connect('mongodb://localhost/airbnbapi');
+mongoose.createConnection('mongodb://localhost/airbnbapi', {
+    useMongoClient: true
+});
 
 var User = mongoose.model('User', {
 	firstName: String,

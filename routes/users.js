@@ -13,8 +13,8 @@ router.get('/', function(req, res) {
     };
     const user = new User(fakeUser);
     user.save()
-        .then(user => res.send(user))
-        .catch(error => res.sendStatus(400));
+        .then(res.send(user))
+        .catch(res.sendStatus(400));
 });
 
 module.exports = router;
