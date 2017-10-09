@@ -1,5 +1,5 @@
-var userRoutes = require('./users')
+let userRoutes = require('./user')
 
 module.exports = function routes(app){
-    app.use('/users', userRoutes)
+    app.use('/user', userRoutes)
 }

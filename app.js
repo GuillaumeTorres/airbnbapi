@@ -1,18 +1,22 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var env = require('node-env-file');
-var routes = require('./routes/index');
+let express = require('express');
+let app = express();
+let bodyParser = require('body-parser');
+let env = require('node-env-file');
+let routes = require('./routes/index');
 
 env(__dirname + '/.env');
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(express.static('public'));
+app.set('view engine', 'jade');
 routes(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });

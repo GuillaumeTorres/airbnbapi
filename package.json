@@ -22,6 +22,8 @@
     "https": "^1.0.0",
     "mongoose": "^4.12.0",
     "node-env-file": "^0.1.8",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.0"
   }
 }

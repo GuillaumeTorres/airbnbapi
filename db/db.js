@@ -1,11 +1,11 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
-mongoose.createConnection('mongodb://localhost/airbnbapi', {
+mongoose.connect('mongodb://localhost/airbnbapi', {
     useMongoClient: true
 });
 
-var User = mongoose.model('User', {
+let User = mongoose.model('User', {
 	firstName: String,
 	lastName: String,
 	email: String,
@@ -13,7 +13,7 @@ var User = mongoose.model('User', {
 	salt: String
 });
 
-var Booking = mongoose.model('Booking', {
+let Booking = mongoose.model('Booking', {
 	user: Schema.ObjectId,
 	reserved: Boolean,
 	title: String,
