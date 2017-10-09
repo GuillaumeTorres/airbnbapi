@@ -22,3 +22,8 @@ $ use airbnbapi
 $ show collections
 $ db.users.find()
 ```
+
+#### ApiDoc
+```
+$ apidoc -i routes/
+```
