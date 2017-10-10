@@ -1,6 +1,7 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/airbnbapi', {
     useMongoClient: true
 });

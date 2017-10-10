@@ -1,6 +1,11 @@
-let express = require('express');
-let router = express.Router();
+let express = require('express')
+let router = express.Router()
 let User = require('../db/db').User
+let bcrypt = require('bcrypt')
+let jwt = require('jsonwebtoken')
+
+const createToken = userData => jwt.sign(userData, process.env.JWT_SECRET)
+const addToken = userData => Object.assign(userData, {token: createToken(userData)})
 
 /**
  * @api {get} /user/:id Show User
@@ -41,7 +46,10 @@ router.get('/:id', function(req, res) {
  *     {
             firstName: "Jean",
             lastName: "Dupond",
-            email: "jean@gmail.com"
+            email: "jean@gmail.com",
+            "password": "$2a$10$sI45ho/YSKX5P1mlv/DjfeoJW4jJWnYtWC4WRl9aDCUpe2/k8eGtu",
+            "salt": "$2a$10$sI45ho/YSKX5P1mlv",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
        }
  *
  * @apiError UserNotCreated An error occurred.
@@ -53,11 +61,19 @@ router.get('/:id', function(req, res) {
  *     }
  */
 router.post('/create', function(req, res) {
-    const user = new User(req.body)
+    const userData = req.body
+    const salt = bcrypt.genSaltSync(10)
+    const hash = bcrypt.hashSync(userData.password, salt)
+    userData.password = hash
+    userData.salt = salt
+
+    const user = new User(userData)
+    const userDataWithToken = addToken(userData)
     user.save()
-        .then(res.send(user))
-        .catch(res.sendStatus(400));
-});
+        .then(res.send(userDataWithToken))
+        .catch(res.sendStatus(400))
+    // TODO Fix Header issue
+})
 
 /**
  * @api {put} /user/edit/:id Edit User
@@ -84,7 +100,7 @@ router.put('/edit/:id', function(req, res) {
     User.findByIdAndUpdate(req.params.id, req.body)
         .then(user => res.send(user))
         .catch(err => res.send(err))
-});
+})
 
 /**
  * @api {get} /user/:id Delete User
@@ -110,7 +126,7 @@ router.delete('/delete/:id', function(req, res) {
         _id: req.params.id
     })
         .then(res.send({success: 'User deleted'}))
-        .catch(err => res.send('nanana'))
+        .catch(err => res.send(err))
 })
 
 module.exports = router;
