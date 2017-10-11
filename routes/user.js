@@ -1,11 +1,13 @@
 let express = require('express')
 let router = express.Router()
 let User = require('../db/db').User
-let bcrypt = require('bcrypt')
-let jwt = require('jsonwebtoken')
 
-const createToken = userData => jwt.sign(userData, process.env.JWT_SECRET)
-const addToken = userData => Object.assign(userData, {token: createToken(userData)})
+const formatUser = user => {
+    user.password = undefined
+    user.salt = undefined
+
+    return user
+}
 
 /**
  * @api {get} /user/:id Show User
@@ -29,50 +31,12 @@ const addToken = userData => Object.assign(userData, {token: createToken(userDat
  *     }
  */
 router.get('/:id', function(req, res) {
-    User.find({
+    User.findOne({
         _id: req.params.id
     })
+        .then(formatUser)
         .then(user => res.send(user))
         .catch(err => res.send(err))
-})
-
-/**
- * @api {post} /user/create Create new user
- * @apiName createUser
- * @apiGroup User
- * @apiSuccess {String} firstName lastName of the User.
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *     {
-            firstName: "Jean",
-            lastName: "Dupond",
-            email: "jean@gmail.com",
-            "password": "$2a$10$sI45ho/YSKX5P1mlv/DjfeoJW4jJWnYtWC4WRl9aDCUpe2/k8eGtu",
-            "salt": "$2a$10$sI45ho/YSKX5P1mlv",
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-       }
- *
- * @apiError UserNotCreated An error occurred.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "User not created"
- *     }
- */
-router.post('/create', function(req, res) {
-    const userData = req.body
-    const salt = bcrypt.genSaltSync(10)
-    const hash = bcrypt.hashSync(userData.password, salt)
-    userData.password = hash
-    userData.salt = salt
-
-    const user = new User(userData)
-    const userDataWithToken = addToken(userData)
-    user.save()
-        .then(res.send(userDataWithToken))
-        .catch(res.sendStatus(400))
-    // TODO Fix Header issue
 })
 
 /**
@@ -97,7 +61,8 @@ router.post('/create', function(req, res) {
  *     }
  */
 router.put('/edit/:id', function(req, res) {
-    User.findByIdAndUpdate(req.params.id, req.body)
+    User.findOneAndUpdate(req.params.id, req.body)
+        .then(formatUser)
         .then(user => res.send(user))
         .catch(err => res.send(err))
 })
