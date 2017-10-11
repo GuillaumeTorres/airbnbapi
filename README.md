@@ -4,7 +4,7 @@ AirBnB Like api
 #### Install
 
 ```
-$ touch .env
+$ echo JWT_SECRET=mySecret > .env
 $ npm install
 $ apt install mongodb
 ```
@@ -25,5 +25,9 @@ $ db.users.find()
 
 #### ApiDoc
 ```
-$ apidoc -i routes/
+$ npm run apidoc
+```
+Custom
+```
+$ node_modules/apidoc/bin/apidoc -i routes/ -o doc/
 ```
