@@ -10,18 +10,19 @@ let User = mongoose.model('User', {
 	firstName: String,
 	lastName: String,
 	email: String,
+	username: String,
 	password: String,
 	salt: String
-});
+})
 
 let Booking = mongoose.model('Booking', {
-	user: Schema.ObjectId,
-	house: Schema.ObjectId,
+	user: String,
+	house: String,
 	date:{
 		arrival: Date,
 		departure: Date
 	}
-});
+})
 
 let House = mongoose.model('House', {
     user: Schema.ObjectId,
