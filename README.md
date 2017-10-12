@@ -2,12 +2,19 @@ AirBnB Like api
 =====================
 
 #### Install
-
 ```
-$ echo JWT_SECRET=mySecret > .env
+$ touch .env
 $ npm install
 $ apt install mongodb
 ```
+
+##### .env
+```
+JWT_SECRET=mySecret
+MAIL_USERNAME=myUsername
+MAIL_PASSWORD=myPassword
+```
+
 #### Run
 
 ```

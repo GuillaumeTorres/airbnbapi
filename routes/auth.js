@@ -3,6 +3,7 @@ let router = express.Router()
 let User = require('../db/db').User
 let bcrypt = require('bcrypt')
 let jwt = require('jsonwebtoken')
+let mailer = require('../services/mailer')
 
 const createToken = userData => jwt.sign(userData, process.env.JWT_SECRET)
 const addToken = userData => Object.assign(userData, {token: createToken(userData)})
@@ -48,7 +49,18 @@ router.post('/register', function(req, res) {
     const user = new User(userData)
     const userDataWithToken = addToken(userData)
     user.save()
-        .then(res.send(userDataWithToken))
+        .then(user => {
+            let body = '<h2>Inscription validé</h2>' +
+                '<p>Votre inscription a bien été validé, vous pouvez dès à présent vous connecter avec vos identifiants</p>'
+            let mailOptions = {
+                from: '"Admin" <admin@airbnblike.com>',
+                to: user.email,
+                subject: 'Confirmation d\'inscription',
+                html: body
+            }
+            mailer(mailOptions)
+            res.send(userDataWithToken)
+        })
         .catch(res.sendStatus(400))
     // TODO Fix Header issue
 })

@@ -68,7 +68,7 @@ router.put('/edit/:id', function(req, res) {
 })
 
 /**
- * @api {get} /user/:id Delete User
+ * @api {delete} /user/delete/:id Delete User
  * @apiName deleteUser
  * @apiGroup User
  * @apiSuccess {String} firstName lastName of the User.
