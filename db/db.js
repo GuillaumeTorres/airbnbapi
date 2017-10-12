@@ -16,18 +16,26 @@ let User = mongoose.model('User', {
 
 let Booking = mongoose.model('Booking', {
 	user: Schema.ObjectId,
-	reserved: Boolean,
-	title: String,
-	description: String,
-	placeNumber: Number,
+	house: Schema.ObjectId,
+	date:{
+		arrival: Date,
+		departure: Date
+	}
+});
+
+let House = mongoose.model('House', {
+    user: Schema.ObjectId,
+    title: String,
+    description: String,
+    placeNumber: Number,
     address: {
         street: String,
         city: String,
         postal_code: String
     },
-	created: Date
-});
+})
 
 
 module.exports.User = User;
 module.exports.Booking = Booking;
+module.exports.House = House;
