@@ -1,8 +1,11 @@
-let express = require('express');
-let app = express();
-let bodyParser = require('body-parser');
-let env = require('node-env-file');
-let routes = require('./routes/index');
+let express = require('express')
+let app = express()
+let bodyParser = require('body-parser')
+let env = require('node-env-file')
+let routes = require('./routes/index')
+server = require('http').createServer(app)
+io = require('socket.io').listen(server)
+ent = require('ent')
 
 env(__dirname + '/.env');
 
@@ -13,6 +16,19 @@ app.use(bodyParser.urlencoded({
 app.use(express.static('public'));
 app.set('view engine', 'jade');
 routes(app);
+
+io.sockets.on('connect', function (socket, username) {
+    socket.on('new_client', function(username) {
+        username = ent.encode(username);
+        socket.username = username;
+        socket.broadcast.emit('new_client', username);
+    });
+
+    socket.on('message', function (message) {
+        message = ent.encode(message);
+        socket.broadcast.emit('message', {username: socket.username, message: message});
+    });
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
