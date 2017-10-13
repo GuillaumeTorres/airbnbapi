@@ -47,7 +47,6 @@ router.post('/register', function(req, res) {
     userData.salt = salt
 
     const user = new User(userData)
-    const userDataWithToken = addToken(userData)
     user.save()
         .then(user => {
             let body = '<h2>Inscription validé</h2>' +
@@ -59,9 +58,11 @@ router.post('/register', function(req, res) {
                 html: body
             }
             mailer(mailOptions)
+            userData._id = user._id
+            const userDataWithToken = addToken(filterUserData(userData))
             res.send(userDataWithToken)
         })
-        .catch(res.sendStatus(400))
+        .catch(err => res.send(err))
     // TODO Fix Header issue
 })
 

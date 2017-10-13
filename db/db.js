@@ -28,7 +28,7 @@ let House = mongoose.model('House', {
 })
 
 let Booking = mongoose.model('Booking', {
-	user: Schema.ObjectId,
+	user: { type: Schema.ObjectId, default: null },
 	house: {
         user: Schema.ObjectId,
         title: String,
@@ -40,7 +40,7 @@ let Booking = mongoose.model('Booking', {
             postal_code: String
         }
 	},
-	reserved: Boolean,
+	reserved: { type: Boolean, default: false },
 	date: {
 		departure: Date,
         arrival: Date

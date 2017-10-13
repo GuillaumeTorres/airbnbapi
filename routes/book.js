@@ -56,10 +56,9 @@ router.post('/search', function(req, res) {
 })
 
 /**
- * @api {post} /auth/register Create new user
- * @apiName createUser
- * @apiGroup User
- * @apiSuccess {String} firstName lastName of the User.
+ * @api {post} /book/create Create reservation
+ * @apiName createReservation
+ * @apiGroup Booking
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *
@@ -86,6 +85,34 @@ router.post('/create', function(req, res) {
     bookData.save()
         .then(res.send(bookData))
         .catch(res.sendStatus(400).send({error: "The booking process failed"}))
+})
+
+/**
+ * @api {post} /book/reserve Reserve
+ * @apiName userReservation
+ * @apiGroup Booking
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+            success: "reservation valided"
+       }
+ *
+ * @apiError BookNotCreated An error occurred.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "The booking process failed"
+ *     }
+ */
+router.post('/reserve', function(req, res) {
+    const booking = {
+        user: req.user._id,
+        reserved: true
+    }
+    Booking.findOneAndUpdate({_id: req.body.id_book}, booking)
+        .then(res.send({success: 'reservation valided'}))
+        .catch(err => res.sendStatus(400).send(err))
 })
 
 module.exports = router;
