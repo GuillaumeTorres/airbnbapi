@@ -4,7 +4,7 @@ let Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/airbnbapi', {
     useMongoClient: true
-});
+})
 
 let User = mongoose.model('User', {
 	firstName: String,
@@ -13,15 +13,6 @@ let User = mongoose.model('User', {
 	username: String,
 	password: String,
 	salt: String
-})
-
-let Booking = mongoose.model('Booking', {
-	user: String,
-	house: String,
-	date:{
-		arrival: Date,
-		departure: Date
-	}
 })
 
 let House = mongoose.model('House', {
@@ -33,10 +24,29 @@ let House = mongoose.model('House', {
         street: String,
         city: String,
         postal_code: String
-    },
+    }
 })
 
+let Booking = mongoose.model('Booking', {
+	user: Schema.ObjectId,
+	house: {
+        user: Schema.ObjectId,
+        title: String,
+        description: String,
+        placeNumber: Number,
+        address: {
+            street: String,
+            city: String,
+            postal_code: String
+        }
+	},
+	reserved: Boolean,
+	date: {
+		departure: Date,
+        arrival: Date
+    }
+})
 
-module.exports.User = User;
-module.exports.Booking = Booking;
-module.exports.House = House;
+module.exports.User = User
+module.exports.House = House
+module.exports.Booking = Booking

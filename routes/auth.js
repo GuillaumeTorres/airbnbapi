@@ -90,9 +90,9 @@ router.post('/register', function(req, res) {
  *     }
  */
 router.post('/login', function(req, res) {
-    User.findOne({email: req.body.email})
+    User.findOne({username: req.body.username})
         .then(user => User.findOne({
-            email: user.email,
+            username: user.username,
             password: bcrypt.hashSync(req.body.password, user.salt)
         }))
         .then(user => {

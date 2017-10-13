@@ -12,13 +12,12 @@ let checkToken = (req, res, next) => {
         next()
     }
     catch(err){
-        console.log('errrr')
         res.sendStatus(400)
     }
 }
 
 module.exports = function routes(app){
     app.use('/user', checkToken, userRoutes)
-    app.use('/book', bookRoutes)
+    app.use('/book', checkToken, bookRoutes)
     app.use('/auth', authRoutes)
 }
