@@ -10,10 +10,9 @@ const formatUser = user => {
 }
 
 /**
- * @api {get} /user/:id Show User
+ * @api {get} /user Show current user
  * @apiName showUser
  * @apiGroup User
- * @apiSuccess {String} firstName lastName of the User.
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -21,29 +20,20 @@ const formatUser = user => {
             lastName: "Dupond",
             email: "jean@gmail.com"
        }
- *
- * @apiError UserNotFound An error occurred.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "User not found"
- *     }
  */
-router.get('/:id', function(req, res) {
+router.get('/', function(req, res) {
     User.findOne({
-        _id: req.params.id
+        _id: req.user._id
     })
         .then(formatUser)
         .then(user => res.send(user))
-        .catch(err => res.send(err))
+        .catch(err => res.send({error: 'User not found'}))
 })
 
 /**
  * @api {put} /user/edit/:id Edit User
  * @apiName editUser
  * @apiGroup User
- * @apiSuccess {String} firstName lastName of the User.
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -51,14 +41,6 @@ router.get('/:id', function(req, res) {
             lastName: "Dupond",
             email: "jean@gmail.com"
        }
- *
- * @apiError UserNotFound An error occurred.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "User not found"
- *     }
  */
 router.put('/edit/:id', function(req, res) {
     User.findOneAndUpdate(req.params.id, req.body)
@@ -71,20 +53,11 @@ router.put('/edit/:id', function(req, res) {
  * @api {delete} /user/delete/:id Delete User
  * @apiName deleteUser
  * @apiGroup User
- * @apiSuccess {String} firstName lastName of the User.
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-            "success": "User removed"
+            "success": "User deleted"
        }
- *
- * @apiError UserNotFound An error occurred.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "User not found"
- *     }
  */
 router.delete('/delete/:id', function(req, res) {
     User.remove({

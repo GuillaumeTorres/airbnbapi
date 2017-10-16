@@ -12,8 +12,7 @@ let Booking = require('../db/db').Booking
  *     [
          {
              "_id": "59e07ba97635dd6885be8aae",
-             "reserved": false,
-             "__v": 0,
+             "reserved": true,
              "date": {
                  "departure": "2017-11-01T09:00:00.000Z",
                  "arrival": "2017-11-10T09:00:00.000Z"
@@ -27,15 +26,11 @@ let Booking = require('../db/db').Booking
                      "city": "Paris",
                      "postal_code": "92"
                  }
-             }
+             },
+             "user": "59e0bbff4bb62e04db95e30d"
          }
         ]
  *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "The search process failed"
- *     }
  */
 router.post('/search', function(req, res) {
     const parameters = req.body
@@ -48,11 +43,8 @@ router.post('/search', function(req, res) {
             'date.departure': {$gte: (dateDeparture)},
             'date.arrival': {$lte: dateArrival}
         })
-        .then(book => {
-            console.log(book)
-            res.send(book)
-        })
-        .catch(err => res.send(err))
+        .then(book => res.send(book))
+        .catch(err => res.sendStatus(400).send(err))
 })
 
 /**
@@ -63,21 +55,25 @@ router.post('/search', function(req, res) {
  *     HTTP/1.1 200 OK
  *
  *     {
-            firstName: "Jean",
-            lastName: "Dupond",
-            email: "jean@gmail.com",
-            "password": "$2a$10$sI45ho/YSKX5P1mlv/DjfeoJW4jJWnYtWC4WRl9aDCUpe2/k8eGtu",
-            "salt": "$2a$10$sI45ho/YSKX5P1mlv",
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-       }
+         "_id": "59e07ba97635dd6885be8aae",
+         "reserved": false,
+         "date": {
+             "departure": "2017-11-01T09:00:00.000Z",
+             "arrival": "2017-11-10T09:00:00.000Z"
+         },
+         "house": {
+             "title": "ma maison",
+             "description": "C MA MAISON GUEUH",
+             "placeNumber": 4,
+             "address": {
+                 "street": "la rue",
+                 "city": "Paris",
+                 "postal_code": "92"
+             }
+         },
+         "user": null
+        }
  *
- * @apiError UserNotCreated An error occurred.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "The booking process failed"
- *     }
  */
 router.post('/create', function(req, res) {
     const bookData = new Booking(req.body)
@@ -97,13 +93,6 @@ router.post('/create', function(req, res) {
             success: "reservation valided"
        }
  *
- * @apiError BookNotCreated An error occurred.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "The booking process failed"
- *     }
  */
 router.post('/reserve', function(req, res) {
     const booking = {

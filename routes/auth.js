@@ -16,10 +16,9 @@ const filterUserData = user => ({
 })
 
 /**
- * @api {post} /auth/register Create new user
+ * @api {post} /auth/register Create User
  * @apiName createUser
  * @apiGroup User
- * @apiSuccess {String} firstName lastName of the User.
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -30,14 +29,6 @@ const filterUserData = user => ({
             "salt": "$2a$10$sI45ho/YSKX5P1mlv",
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
        }
- *
- * @apiError UserNotCreated An error occurred.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "User not created"
- *     }
  */
 router.post('/register', function(req, res) {
     const userData = req.body
@@ -70,7 +61,6 @@ router.post('/register', function(req, res) {
  * @api {post} /auth/login Login
  * @apiName login
  * @apiGroup User
- * @apiSuccess {String} firstName lastName of the User.
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -81,14 +71,6 @@ router.post('/register', function(req, res) {
             "salt": "$2a$10$sI45ho/YSKX5P1mlv",
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
        }
- *
- * @apiError UserNotLogged An error occurred.
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "User not found"
- *     }
  */
 router.post('/login', function(req, res) {
     User.findOne({username: req.body.username})
