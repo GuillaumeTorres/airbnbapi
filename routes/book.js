@@ -8,7 +8,6 @@ let Booking = require('../db/db').Booking
  * @apiGroup Booking
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *
  *     [
          {
              "_id": "59e07ba97635dd6885be8aae",
@@ -29,8 +28,7 @@ let Booking = require('../db/db').Booking
              },
              "user": "59e0bbff4bb62e04db95e30d"
          }
-        ]
- *
+       ]
  */
 router.post('/search', (req, res) => {
     const parameters = req.body
@@ -53,7 +51,6 @@ router.post('/search', (req, res) => {
  * @apiGroup Booking
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *
  *     {
          "_id": "59e07ba97635dd6885be8aae",
          "reserved": false,
@@ -73,7 +70,6 @@ router.post('/search', (req, res) => {
          },
          "user": null
         }
- *
  */
 router.post('/create', (req, res) => {
     const bookData = new Booking(req.body)
@@ -81,6 +77,38 @@ router.post('/create', (req, res) => {
     bookData.save()
         .then(res.send(bookData))
         .catch(res.sendStatus(400).send({error: "The booking process failed"}))
+})
+
+/**
+ * @api {put} /book/edit/:id Edit house
+ * @apiName editBooking
+ * @apiGroup Booking
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+         "_id": "59e07ba97635dd6885be8aae",
+         "reserved": false,
+         "date": {
+             "departure": "2017-11-01T09:00:00.000Z",
+             "arrival": "2017-11-10T09:00:00.000Z"
+         },
+         "house": {
+             "title": "ma maison",
+             "description": "C MA MAISON GUEUH",
+             "placeNumber": 4,
+             "address": {
+                 "street": "la rue",
+                 "city": "Paris",
+                 "postal_code": "92"
+             }
+         },
+         "user": null
+        }
+ */
+router.put('/edit/:id', (req, res) => {
+    Booking.findOneAndUpdate(req.params.id, req.body)
+        .then(booking => res.send(booking))
+        .catch(err => res.sendStatus(400).send(err))
 })
 
 /**
@@ -92,7 +120,6 @@ router.post('/create', (req, res) => {
  *     {
             success: "reservation valided"
        }
- *
  */
 router.post('/reserve', (req, res) => {
     const booking = {
@@ -101,6 +128,26 @@ router.post('/reserve', (req, res) => {
     }
     Booking.findOneAndUpdate({_id: req.body.id_book}, booking)
         .then(res.send({success: 'reservation valided'}))
+        .catch(err => res.sendStatus(400).send(err))
+})
+
+/**
+ * @api {post} /book/cancel Cancel reservation
+ * @apiName cancelReservation
+ * @apiGroup Booking
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+            success: "reservation canceled"
+       }
+ */
+router.post('/cancel', (req, res) => {
+    const booking = {
+        user: null,
+        reserved: false
+    }
+    Booking.findOneAndUpdate({_id: req.body.id_book}, booking)
+        .then(res.send({success: 'reservation canceled'}))
         .catch(err => res.sendStatus(400).send(err))
 })
 
