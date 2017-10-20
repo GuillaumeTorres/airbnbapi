@@ -30,7 +30,7 @@ const filterUserData = user => ({
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
        }
  */
-router.post('/register', function(req, res) {
+router.post('/register', (req, res) => {
     const userData = req.body
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(userData.password, salt)
@@ -72,7 +72,7 @@ router.post('/register', function(req, res) {
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
        }
  */
-router.post('/login', function(req, res) {
+router.post('/login', (req, res) => {
     User.findOne({username: req.body.username})
         .then(user => User.findOne({
             username: user.username,

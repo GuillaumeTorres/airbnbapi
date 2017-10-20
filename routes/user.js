@@ -21,7 +21,7 @@ const formatUser = user => {
             email: "jean@gmail.com"
        }
  */
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
     User.findOne({
         _id: req.user._id
     })
@@ -42,7 +42,7 @@ router.get('/', function(req, res) {
             email: "jean@gmail.com"
        }
  */
-router.put('/edit/:id', function(req, res) {
+router.put('/edit/:id', (req, res) => {
     User.findOneAndUpdate(req.params.id, req.body)
         .then(formatUser)
         .then(user => res.send(user))
@@ -59,7 +59,7 @@ router.put('/edit/:id', function(req, res) {
             "success": "User deleted"
        }
  */
-router.delete('/delete/:id', function(req, res) {
+router.delete('/delete/:id', (req, res) => {
     User.remove({
         _id: req.params.id
     })

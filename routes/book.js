@@ -32,7 +32,7 @@ let Booking = require('../db/db').Booking
         ]
  *
  */
-router.post('/search', function(req, res) {
+router.post('/search', (req, res) => {
     const parameters = req.body
     const dateDeparture = new Date(parameters.date_departure)
     const dateArrival = new Date(parameters.date_arrival)
@@ -75,7 +75,7 @@ router.post('/search', function(req, res) {
         }
  *
  */
-router.post('/create', function(req, res) {
+router.post('/create', (req, res) => {
     const bookData = new Booking(req.body)
 
     bookData.save()
@@ -94,7 +94,7 @@ router.post('/create', function(req, res) {
        }
  *
  */
-router.post('/reserve', function(req, res) {
+router.post('/reserve', (req, res) => {
     const booking = {
         user: req.user._id,
         reserved: true
