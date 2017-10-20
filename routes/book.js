@@ -19,7 +19,7 @@ let Booking = require('../db/db').Booking
              "house": {
                  "title": "ma maison",
                  "description": "C MA MAISON GUEUH",
-                 "placeNumber": 4,
+                 "place_number": 4,
                  "address": {
                      "street": "la rue",
                      "city": "Paris",
@@ -36,13 +36,13 @@ router.post('/search', (req, res) => {
     const dateArrival = new Date(parameters.date_arrival)
         Booking.find({
             'house.address.city': parameters.city,
-            'house.placeNumber': parameters.place_number,
+            'house.place_number': parameters.place_number,
             'reserved': false,
             'date.departure': {$gte: (dateDeparture)},
             'date.arrival': {$lte: dateArrival}
         })
         .then(book => res.send(book))
-        .catch(err => res.sendStatus(400).send(err))
+        .catch(err => res.status(400).send(err.message || 500))
 })
 
 /**
@@ -61,7 +61,7 @@ router.post('/search', (req, res) => {
          "house": {
              "title": "ma maison",
              "description": "C MA MAISON GUEUH",
-             "placeNumber": 4,
+             "place_number": 4,
              "address": {
                  "street": "la rue",
                  "city": "Paris",
@@ -76,7 +76,7 @@ router.post('/create', (req, res) => {
 
     bookData.save()
         .then(res.send(bookData))
-        .catch(res.sendStatus(400).send({error: "The booking process failed"}))
+        .catch(err => res.status(400).send(err.message || 500))
 })
 
 /**
@@ -95,7 +95,7 @@ router.post('/create', (req, res) => {
          "house": {
              "title": "ma maison",
              "description": "C MA MAISON GUEUH",
-             "placeNumber": 4,
+             "place_number": 4,
              "address": {
                  "street": "la rue",
                  "city": "Paris",
@@ -108,7 +108,7 @@ router.post('/create', (req, res) => {
 router.put('/edit/:id', (req, res) => {
     Booking.findOneAndUpdate(req.params.id, req.body)
         .then(booking => res.send(booking))
-        .catch(err => res.sendStatus(400).send(err))
+        .catch(err => res.status(404).send(err.message || 500))
 })
 
 /**
@@ -128,7 +128,7 @@ router.post('/reserve', (req, res) => {
     }
     Booking.findOneAndUpdate({_id: req.body.id_book}, booking)
         .then(res.send({success: 'reservation valided'}))
-        .catch(err => res.sendStatus(400).send(err))
+        .catch(err => res.status(400).send(err.message || 500))
 })
 
 /**
@@ -148,7 +148,7 @@ router.post('/cancel', (req, res) => {
     }
     Booking.findOneAndUpdate({_id: req.body.id_book}, booking)
         .then(res.send({success: 'reservation canceled'}))
-        .catch(err => res.sendStatus(400).send(err))
+        .catch(err => res.status(400).send(err.message || 500))
 })
 
 module.exports = router;

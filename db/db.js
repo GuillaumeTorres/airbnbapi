@@ -7,43 +7,43 @@ mongoose.connect('mongodb://localhost/airbnbapi', {
 })
 
 let User = mongoose.model('User', {
-	firstName: String,
-	lastName: String,
-	email: String,
-	username: String,
-	password: String,
+    username: { type: String, required: true, unique: true },
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+	password: { type: String, required: true },
 	salt: String
 })
 
 let House = mongoose.model('House', {
-    user: Schema.ObjectId,
-    title: String,
-    description: String,
-    placeNumber: Number,
+    user: { type: Schema.ObjectId, required: true },
+    title: { type: String, required: true, max: 20 },
+    description: { type: String, required: true },
+    place_number: { type: Number, required: true },
     address: {
-        street: String,
-        city: String,
-        postal_code: String
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        postal_code: { type: Number, required: true }
     }
 })
 
 let Booking = mongoose.model('Booking', {
 	user: { type: Schema.ObjectId, default: null },
 	house: {
-        user: Schema.ObjectId,
-        title: String,
-        description: String,
-        placeNumber: Number,
+        user: { type: Schema.ObjectId, required: true },
+        title: { type: String, required: true, max: 20 },
+        description: { type: String, required: true },
+        place_number: { type: Number, required: true },
         address: {
-            street: String,
-            city: String,
-            postal_code: String
+            street: { type: String, required: true },
+            city: { type: String, required: true },
+            postal_code: { type: Number, required: true }
         }
-	},
+    },
 	reserved: { type: Boolean, default: false },
 	date: {
-		departure: Date,
-        arrival: Date
+		departure: { type: Date, required: true },
+        arrival: { type: Date, required: true }
     }
 })
 

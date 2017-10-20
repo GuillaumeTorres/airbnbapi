@@ -10,8 +10,8 @@ const addToken = userData => Object.assign(userData, {token: createToken(userDat
 
 const filterUserData = user => ({
     _id: user._id,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    first_name: user.first_name,
+    last_name: user.last_name,
     email: user.email
 })
 
@@ -22,8 +22,9 @@ const filterUserData = user => ({
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-            firstName: "Jean",
-            lastName: "Dupond",
+ *          username: "jdupond",
+            first_name: "Jean",
+            last_name: "Dupond",
             email: "jean@gmail.com",
             "password": "$2a$10$sI45ho/YSKX5P1mlv/DjfeoJW4jJWnYtWC4WRl9aDCUpe2/k8eGtu",
             "salt": "$2a$10$sI45ho/YSKX5P1mlv",
@@ -53,7 +54,7 @@ router.post('/register', (req, res) => {
             const userDataWithToken = addToken(filterUserData(userData))
             res.send(userDataWithToken)
         })
-        .catch(err => res.send(err))
+        .catch(err => res.status(400).send(err.message || 500))
     // TODO Fix Header issue
 })
 
@@ -64,8 +65,9 @@ router.post('/register', (req, res) => {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-            firstName: "Jean",
-            lastName: "Dupond",
+ *          username: "jdupond",
+            first_name: "Jean",
+            last_name: "Dupond",
             email: "jean@gmail.com",
             "password": "$2a$10$sI45ho/YSKX5P1mlv/DjfeoJW4jJWnYtWC4WRl9aDCUpe2/k8eGtu",
             "salt": "$2a$10$sI45ho/YSKX5P1mlv",
@@ -83,7 +85,7 @@ router.post('/login', (req, res) => {
             const userDataWithToken = addToken(filterUserData(user))
             res.send(userDataWithToken)
         })
-        .catch(err => res.send(err))
+        .catch(err => res.status(404).send(err.message || 500))
 })
 
 module.exports = router;

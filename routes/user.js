@@ -16,18 +16,17 @@ const formatUser = user => {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-            firstName: "Jean",
-            lastName: "Dupond",
+ *          username: "jdupond",
+            first_name: "Jean",
+            last_name: "Dupond",
             email: "jean@gmail.com"
        }
  */
 router.get('/', (req, res) => {
-    User.findOne({
-        _id: req.user._id
-    })
+    User.findOne({ _id: req.user._id })
         .then(formatUser)
         .then(user => res.send(user))
-        .catch(err => res.send({error: 'User not found'}))
+        .catch(err => res.status(404).send(err.message || 500))
 })
 
 /**
@@ -37,16 +36,17 @@ router.get('/', (req, res) => {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
-            firstName: "Jean",
-            lastName: "Dupond",
-            email: "jean@gmail.com"
+ *          username: "jdupond",
+            first_name: "Jean",
+            last_name: "Dupond",
+            email: "jean.dupond@gmail.com"
        }
  */
 router.put('/edit/:id', (req, res) => {
-    User.findOneAndUpdate(req.params.id, req.body)
+    User.findOneAndUpdate({ _id: req.params.id }, req.body)
         .then(formatUser)
         .then(user => res.send(user))
-        .catch(err => res.send(err))
+        .catch(err => res.status(404).send(err.message || 500))
 })
 
 /**
@@ -60,11 +60,9 @@ router.put('/edit/:id', (req, res) => {
        }
  */
 router.delete('/delete/:id', (req, res) => {
-    User.remove({
-        _id: req.params.id
-    })
+    User.remove({ _id: req.params.id })
         .then(res.send({success: 'User deleted'}))
-        .catch(err => res.send(err))
+        .catch(err => res.status(404).send(err.message || 500))
 })
 
 module.exports = router;
