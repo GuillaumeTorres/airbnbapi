@@ -51,7 +51,7 @@ router.post('/register', (req, res) => {
             }
             mailer(mailOptions)
             userData._id = user._id
-            const userDataWithToken = addToken(filterUserData(userData))
+            const userDataWithToken = addToken(userData)
             res.send(userDataWithToken)
         })
         .catch(err => res.status(400).send(err.message || 500))
@@ -81,11 +81,11 @@ router.post('/login', (req, res) => {
             password: bcrypt.hashSync(req.body.password, user.salt)
         }))
         .then(user => {
-            if (!user) res.send({error: 'not found'})
+            if (!user) res.send({error: 'Wrong password'})
             const userDataWithToken = addToken(filterUserData(user))
             res.send(userDataWithToken)
         })
-        .catch(err => res.status(404).send(err.message || 500))
+        .catch(err => res.status(404).send({ error: 'User not found' }))
 })
 
 module.exports = router;

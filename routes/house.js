@@ -45,7 +45,6 @@ router.get('/:id', (req, res) => {
         }
  */
 router.post('/create', (req, res) => {
-    console.log(req.body)
     const house = new House(req.body)
 
     house.save()
