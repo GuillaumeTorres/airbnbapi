@@ -30,6 +30,15 @@ router.get('/:id', (req, res) => {
  * @api {post} /house/create Create House
  * @apiName createHouse
  * @apiGroup House
+ *
+ * @apiParam {String} title                 Title
+ * @apiParam {String} description           Description
+ * @apiParam {Number} place_number          Number of available places
+ * @apiParam {Object} address               Address
+ * @apiParam {String} address.city          City
+ * @apiParam {String} address.street        Street information
+ * @apiParam {Number} address.postal_code   Postal code
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -45,7 +54,9 @@ router.get('/:id', (req, res) => {
         }
  */
 router.post('/create', (req, res) => {
-    const house = new House(req.body)
+    const houseGet = req.body
+    houseGet.user = req.user._id
+    const house = new House(houseGet)
 
     house.save()
         .then(house => res.send(house))

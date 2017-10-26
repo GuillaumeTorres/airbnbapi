@@ -6,6 +6,12 @@ let Booking = require('../db/db').Booking
  * @api {post} /book/search Search
  * @apiName search
  * @apiGroup Booking
+ *
+ * @apiParam {String} city City
+ * @apiParam {Number} place_number Number of place available
+ * @apiParam {Date} date_departure Date of departure
+ * @apiParam {Date} date_arrival Date of arrival
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     [
@@ -49,6 +55,19 @@ router.post('/search', (req, res) => {
  * @api {post} /book/create Create reservation
  * @apiName createReservation
  * @apiGroup Booking
+ *
+ * @apiParam {Object} house House get in the db
+ * @apiParam {String} house.title Title
+ * @apiParam {String} house.description Description
+ * @apiParam {Number} house.place_number Number of available places
+ * @apiParam {Object} house.address Address
+ * @apiParam {String} house.address.city City
+ * @apiParam {String} house.address.street Street information
+ * @apiParam {Number} house.address.postal_code Postal code
+ * @apiParam {Object} date Date information
+ * @apiParam {Date} date.departure Date of departure
+ * @apiParam {Date} date.arrival Date of arrival
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -115,6 +134,9 @@ router.put('/edit/:id', (req, res) => {
  * @api {post} /book/reserve Reserve
  * @apiName userReservation
  * @apiGroup Booking
+ *
+ * @apiParam {Number} id_book Id of booking
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -135,6 +157,9 @@ router.post('/reserve', (req, res) => {
  * @api {post} /book/cancel Cancel reservation
  * @apiName cancelReservation
  * @apiGroup Booking
+ *
+ * @apiParam {Number} id_book Id of booking
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {

@@ -19,6 +19,13 @@ const filterUserData = user => ({
  * @api {post} /auth/register Create User
  * @apiName createUser
  * @apiGroup User
+ *
+ * @apiParam {String} username Username
+ * @apiParam {String} first_name First name
+ * @apiParam {String} last_name Last name
+ * @apiParam {String} email Email address
+ * @apiParam {String} password Password
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -55,13 +62,16 @@ router.post('/register', (req, res) => {
             res.send(userDataWithToken)
         })
         .catch(err => res.status(400).send(err.message || 500))
-    // TODO Fix Header issue
 })
 
 /**
  * @api {post} /auth/login Login
  * @apiName login
  * @apiGroup User
+ *
+ * @apiParam {String} username Username
+ * @apiParam {String} first_name First name
+ *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -81,7 +91,7 @@ router.post('/login', (req, res) => {
             password: bcrypt.hashSync(req.body.password, user.salt)
         }))
         .then(user => {
-            if (!user) res.send({error: 'Wrong password'})
+            if (!user) return res.send({error: 'Wrong password'})
             const userDataWithToken = addToken(filterUserData(user))
             res.send(userDataWithToken)
         })
